@@ -16,18 +16,11 @@ async function getSpotifyToken() {
 }
 
 module.exports = async (req, res) => {
-    // CORS biar bisa diakses dari frontend
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
+    
     const query = req.query.q;
     if (!query) {
-        return res.status(400).json({ error: 'Query parameter "q" is required' });
+        return res.status(400).json({ error: 'Query "q" diperlukan' });
     }
 
     try {
@@ -39,7 +32,7 @@ module.exports = async (req, res) => {
 
         const track = response.data.tracks.items[0];
         if (!track || !track.preview_url) {
-            return res.json({ success: false, message: 'Preview tidak tersedia untuk lagu ini' });
+            return res.json({ success: false, message: 'Preview tidak tersedia' });
         }
 
         res.json({
@@ -49,7 +42,6 @@ module.exports = async (req, res) => {
             preview_url: track.preview_url
         });
     } catch (error) {
-        console.error('Error:', error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 };
