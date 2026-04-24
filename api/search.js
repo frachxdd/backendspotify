@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const CLIENT_ID = 'ad7ddc4c765f4937b0acb69dce60b299';
 const CLIENT_SECRET = '798fdb9ee6fe461381f058423c91d626';
@@ -15,8 +15,7 @@ async function getSpotifyToken() {
     return response.data.access_token;
 }
 
-module.exports = async (req, res) => {
-    // CORS
+export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -39,7 +38,7 @@ module.exports = async (req, res) => {
 
         const track = response.data.tracks.items[0];
         if (!track || !track.preview_url) {
-            return res.json({ success: false, message: 'Preview tidak tersedia untuk lagu ini' });
+            return res.json({ success: false, message: 'Preview tidak tersedia' });
         }
 
         res.json({
@@ -51,4 +50,4 @@ module.exports = async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-};
+}
