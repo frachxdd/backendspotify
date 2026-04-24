@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 const CLIENT_ID = 'ad7ddc4c765f4937b0acb69dce60b299';
 const CLIENT_SECRET = '798fdb9ee6fe461381f058423c91d626';
@@ -15,14 +15,8 @@ async function getSpotifyToken() {
     return response.data.access_token;
 }
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
     
     const query = req.query.q;
     if (!query) {
@@ -50,4 +44,4 @@ export default async function handler(req, res) {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-}
+};
